@@ -1,3 +1,6 @@
+#Simple script to create php-fpm pool, related user and apache2 vhost.
+
+
 #!/bin/bash
 if [ $# -ne 2 ]; then
         echo "Usage: $0 domain tld. For example $0 arielcaldaie it for arielcaldaie.it"
