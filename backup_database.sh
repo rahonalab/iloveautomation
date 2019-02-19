@@ -7,7 +7,7 @@ fi
 ######### CONF ####################
 BUCKET=randsolutions-backup
 NAME=$1
-BACKUP_FOLDER=/tmp
+BACKUP_FOLDER=/tmp/database/
 #S3_CMD_CONF=/usr/src/script/s3cmd.cfg
 S3_CMD=/usr/bin/s3cmd
 TAR=/bin/tar
@@ -53,7 +53,7 @@ find $BACKUP_FOLDER -mtime +10 -type f -delete
 ####################################################################################
 #Check and sync with s3 #######################################################
 echo "$(date '+%Y-%m-%d %H:%M') - $ME - INFO - Syncing $BACKUP_FOLDER with  S3 $BUCKET" >&2
-$S3_CMD put $BACKUP_FOLDER/$archive_name s3://$BUCKET/$(hostname -s)/
+$S3_CMD sync --delete-removed $BACKUP_FOLDER s3://$BUCKET/$(hostname -s)-$MYSQL_ENDPOINT-sql/
 ####################################################################################
 ###################################################################################
 echo "$(date '+%Y-%m-%d %H:%M') - $ME - INFO - Done" >&2
