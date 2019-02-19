@@ -6,14 +6,15 @@ fi
 
 
 ######### conf ####################
-bucket=s3://keilhub
-backup_folder=/tmp/efs_backup
+bucket=randsolutions-backup
+backup_folder=/tmp/sites/
 s3_cmd_conf=/root/.s3cfg
 s3_cmd=/usr/bin/s3cmd
 tar=/bin/tar
 local_copies=3
 
-env=$(echo $(hostname -s) | cut -d'-' -f3)
+#env=$(echo $(hostname -s) | cut -d'-' -f3)
+env=$(echo $(hostname -s))
 folder=$1				
 appname=$(basename $(dirname $(readlink -f $folder)))_$(basename $folder)
 archive_name=$(date +%Y%m%d_%H%M)_${appname}_${env}.tgz
@@ -48,14 +49,14 @@ if [ $? -ne 0 ]; then
 fi
 ####################################################################################
 #Check and upload file to s3 #######################################################
-s3_file=s3://${bucket}/${env}/${archive_name}
+s3_file=s3://${bucket}/${env}/
 $s3_cmd -c $s3_cmd_conf ls s3://$bucket/${env}/* | grep $archive_name >>/dev/null 2>&1
 if [[ $? -eq 0 ]]; then
     echo "$(date '+%Y-%m-%d %H:%M') - $ME - ERROR - File:$archive_name already exists in  s3://$bucket/${env}/" >&2
     exit 1
 fi
 echo "$(date '+%Y-%m-%d %H:%M') - $ME - INFO - Uploading backup to S3: $s3_file" >&2
-$s3_cmd -c $s3_cmd_conf put $backup_folder/$archive_name $s3_file >>/dev/null 2>&1
+$s3_cmd sync --delete-removed $backup_folder $s3_file >>/dev/null 2>&1
 ret=$?
 if [ $ret -ne 0 ]; then
     echo "$(date '+%Y-%m-%d %H:%M') - $ME - ERROR - $s3_cmd returned: $ret" >&2

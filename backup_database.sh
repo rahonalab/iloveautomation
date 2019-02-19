@@ -5,15 +5,15 @@ if [ $# -ne 3 ]; then
 fi
 
 ######### CONF ####################
-BUCKET=supermonix
+BUCKET=randsolutions-backup
 NAME=$1
-BACKUP_FOLDER=/tmp/backup
+BACKUP_FOLDER=/tmp
 #S3_CMD_CONF=/usr/src/script/s3cmd.cfg
 S3_CMD=/usr/bin/s3cmd
 TAR=/bin/tar
 MYSQL_DUMP=/usr/bin/mysqldump
 MYSQL_FLAGS="--quick --create-options --single-transaction"
-MYSQL_ENDPOINT="172.31.24.170"
+MYSQL_ENDPOINT="localhost"
 MYSQL_UNAME=$2
 MYSQL_PASSWD=$3
 MYSQL_DB=$1
@@ -53,7 +53,7 @@ find $BACKUP_FOLDER -mtime +10 -type f -delete
 ####################################################################################
 #Check and sync with s3 #######################################################
 echo "$(date '+%Y-%m-%d %H:%M') - $ME - INFO - Syncing $BACKUP_FOLDER with  S3 $BUCKET" >&2
-$S3_CMD put $BACKUP_FOLDER/$archive_name s3://$BUCKET/backup/$(hostname -s)/
+$S3_CMD put $BACKUP_FOLDER/$archive_name s3://$BUCKET/$(hostname -s)/
 ####################################################################################
 ###################################################################################
 echo "$(date '+%Y-%m-%d %H:%M') - $ME - INFO - Done" >&2
