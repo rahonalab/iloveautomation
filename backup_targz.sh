@@ -67,19 +67,10 @@ if [[ $? -ne 0 ]]; then
     echo "$(date '+%Y-%m-%d %H:%M') - $ME - ERROR - File:$s3_file does not exist in  s3://$bucket/$env/" >&2
     exit 1
 fi
-####################################################################################
-## Clean local Copies#############################################################
-number_of_copies=$(ls -l $backup_folder/ | grep $appname | wc -l)
-if [ $number_of_copies -gt $local_copies ]; then
-    let number_of_copies_to_clean=number_of_copies-local_copies+1
-    echo "$(date '+%Y-%m-%d %H:%M') - $ME - INFO - Cleaning $number_of_copies_to_clean local copies" >&2
-    while [ $number_of_copies_to_clean -gt 0 ]; do
-        file_to_clean=$(ls -rt $backup_folder/ | grep $env |  head -n1)
-        echo "$(date '+%Y-%m-%d %H:%M') - $ME - INFO - Cleaning $backup_folder/$file_to_clean" >&2
-        rm -f $backup_folder/$file_to_clean
-        let number_of_copies_to_clean=number_of_copies_to_clean-1
-    done
-fi
+
+## Clean local Copies"#############################################################
+find $BACKUP_FOLDER -mtime +$local_copies -type f -delete
+
 ###################################################################################
 echo "$(date '+%Y-%m-%d %H:%M') - $ME - INFO - Done" >&2
 exit 0
