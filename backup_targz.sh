@@ -47,16 +47,23 @@ if [ $? -ne 0 ]; then
     echo "$(date '+%Y-%m-%d %H:%M') - $ME - ERROR - the archive: $backup_folder/$archive_name does not exist" >&2
     exit 1
 fi
+
+## Clean local Copies"#############################################################
+echo "$(date '+%Y-%m-%d %H:%M') - $ME - INFO - Creating backup: Deleting copies old than $local_copies days from $backup_folder" >&2
+find $backup_folder -mtime +$local_copies -type f -delete
+
+########
+
 ####################################################################################
-#Check and upload file to s3 #######################################################
+#Check and sync files with s3 #######################################################
 s3_file=s3://${bucket}/${env}/
 $s3_cmd -c $s3_cmd_conf ls s3://$bucket/${env}/* | grep $archive_name >>/dev/null 2>&1
 if [[ $? -eq 0 ]]; then
     echo "$(date '+%Y-%m-%d %H:%M') - $ME - ERROR - File:$archive_name already exists in  s3://$bucket/${env}/" >&2
     exit 1
 fi
-echo "$(date '+%Y-%m-%d %H:%M') - $ME - INFO - Uploading backup to S3: $s3_file" >&2
-$s3_cmd sync --delete-removed $backup_folder $s3_file >>/dev/null 2>&1
+echo "$(date '+%Y-%m-%d %H:%M') - $ME - INFO - Sync backup folder with S3: $s3_file" >&2
+$s3_cmd sync --no-check-md5 --delete-removed $backup_folder $s3_file >>/dev/null 2>&1
 ret=$?
 if [ $ret -ne 0 ]; then
     echo "$(date '+%Y-%m-%d %H:%M') - $ME - ERROR - $s3_cmd returned: $ret" >&2
@@ -68,10 +75,7 @@ if [[ $? -ne 0 ]]; then
     exit 1
 fi
 
-## Clean local Copies"#############################################################
-find $BACKUP_FOLDER -mtime +$local_copies -type f -delete
-
-###################################################################################
+###########################################################################
 echo "$(date '+%Y-%m-%d %H:%M') - $ME - INFO - Done" >&2
 exit 0
 ####################################################################################
