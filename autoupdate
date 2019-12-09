@@ -4,7 +4,7 @@
 # you via email if the update was succesful or not.
 
 # Set the variable $admin_email as your email address.
-admin_mail="yourmailhere"
+admin_mail="tecnico@rahona.be"
 
 # Create a temporary path in /tmp to write a temporary log
 # file. No need to edit.
