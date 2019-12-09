@@ -14,11 +14,7 @@
 
 
 <FilesMatch "\.php$">
-<<<<<<< HEAD
   SetHandler "proxy:unix:///var/run/php7-fpm-domain.sock|fcgi://domain/"
-=======
-  SetHandler "proxy:unix:///var/run/php7.0-fpm-domain.sock|fcgi://domain/"
->>>>>>> c38eefc928a320b2ad762ce65490f8005a081f14
 </FilesMatch>
 
 	<Directory /var/www/domain.tld>
@@ -30,11 +26,7 @@
 <LocationMatch "/(fpm-ping|fpm-status)">
   RewriteEngine Off
   Require host localhost
-<<<<<<< HEAD
   SetHandler "proxy:unix:///var/run/php7-fpm-domain.sock|fcgi://domain"
-=======
-  SetHandler "proxy:unix:///var/run/php7.0-fpm-domain.sock|fcgi://domain"
->>>>>>> c38eefc928a320b2ad762ce65490f8005a081f14
 </LocationMatch>
 	
 	# Available loglevels: trace8, ..., trace1, debug, info, notice, warn,

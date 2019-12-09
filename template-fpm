@@ -37,10 +37,6 @@ group = template
 ; Note: This value is mandatory.
 <<<<<<< HEAD
 listen = /var/run/php7-fpm-template.sock
-=======
-listen = /var/run/php7.0-fpm-template.sock
->>>>>>> c38eefc928a320b2ad762ce65490f8005a081f14
-
 ; Set listen(2) backlog.
 ; Default Value: 65535 (-1 on FreeBSD and OpenBSD)
 ;listen.backlog = 65535
