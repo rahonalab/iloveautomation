@@ -10,14 +10,14 @@
 	ServerAlias www.domain.tld
 
 	ServerAdmin tecnico@rahona.be
-	DocumentRoot /var/www/domain.tld
+	DocumentRoot /var/www/domain.tld/public_html
 
 
 <FilesMatch "\.php$">
   SetHandler "proxy:unix:///var/run/php-fpm-domain.sock|fcgi://domain/"
 </FilesMatch>
 
-	<Directory /var/www/domain.tld>
+	<Directory /var/www/domain.tld/public_html>
         	Options +Indexes +FollowSymLinks
                 AllowOverride All
                 Require all granted

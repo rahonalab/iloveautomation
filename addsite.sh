@@ -2,13 +2,14 @@
 #!/bin/bash
 
 if [ $# -ne 3 ]; then
-        echo "Usage: $0 domain tld php_version. For example $0 arielcaldaie it 7.1 for arielcaldaie.it"
+        echo "Usage: $0 domain tld php_version. For example $0 antani org 8.3 for antani.org, php 8.3"
         exit 1;
 fi
 
 mkdir -p /var/www/$1.$2
 adduser --disabled-login --home /var/www/$1.$2 $1
-cp -rvp index.php /var/www/$1.$2
+mkdir -p /var/www/$1.$2/public_html
+cp -rvp index.php /var/www/$1.$2/public_html
 chown $1.$1 -R /var/www/$1*
 adduser www-data $1
 sed s/template/$1/ template-fpm > /etc/php/$3/fpm/pool.d/$1.conf
