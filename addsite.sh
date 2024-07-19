@@ -7,7 +7,7 @@ if [ $# -ne 3 ]; then
 fi
 
 mkdir -p /var/www/$1.$2
-adduser --disabled-login --home /var/www/$1.$2 $1
+adduser --home /var/www/$1.$2 $1
 mkdir -p /var/www/$1.$2/public_html
 cp -rvp index.php /var/www/$1.$2/public_html
 chown $1.$1 -R /var/www/$1*
